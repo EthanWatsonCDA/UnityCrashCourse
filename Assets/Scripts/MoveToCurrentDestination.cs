@@ -7,14 +7,16 @@ public class MoveToCurrentDestination : MonoBehaviour
 {
     public NavMeshAgent agent;
 
-    public Transform currentDestination;
+    public Transform destinationLocation;
 
     public LayerMask whatIsGround;
+
+    public GameObject currentDestination;
 
 
     private void Awake()
     {
-        currentDestination = GameObject.Find("current destination").transform;
+        destinationLocation = GameObject.Find("Destination 1").transform;
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -22,7 +24,7 @@ public class MoveToCurrentDestination : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        agent.SetDestination(destinationLocation.position);
     }
 
     // Update is called once per frame

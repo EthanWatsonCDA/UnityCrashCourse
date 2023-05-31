@@ -6,13 +6,16 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed;
-
     public float groundDrag;
-
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump;
+    Vector3 moveDirection;
+    Rigidbody rb;
+    public Transform orientation;
+    float horizontalInput;
+    float verticalInput;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -22,14 +25,18 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatIsGround;
     bool grounded;
 
-    public Transform orientation;
+    [Header("Score")]
+    public float score = 0;
 
-    float horizontalInput;
-    float verticalInput;
+    [Header("Shooting")]
+    public Camera playerCamera;
+    public GameObject rocketPrefab;
+    public GameObject rocketSpawnPoint;
+    //reference for last fired rocket
+    public GameObject lastSpawnedRocket;
+    private RaycastHit hit;
 
-    Vector3 moveDirection;
-
-    Rigidbody rb;
+    //
 
     private void Start()
     {
@@ -51,11 +58,44 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        //player shooting
+        ShootRocket();
+        ShootRaycast();
     }
 
     private void FixedUpdate()
     {
         MovePlayer();
+    }
+
+    private void ShootRocket()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            lastSpawnedRocket = Instantiate(rocketPrefab, rocketSpawnPoint.transform.position, playerCamera.transform.rotation);
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            Destroy(lastSpawnedRocket.gameObject);
+        }
+    }
+
+    private void ShootRaycast()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("shoot raycast");
+            if (Physics.Raycast(rocketSpawnPoint.transform.position, playerCamera.transform.forward, out hit, 20f))
+            {
+                if (hit.collider.gameObject.CompareTag("Enemy"))
+                {
+                    Debug.Log("hit enemy");
+                    Destroy(hit.collider.gameObject);
+                }
+            }
+        }
+        
     }
 
     private void MyInput()

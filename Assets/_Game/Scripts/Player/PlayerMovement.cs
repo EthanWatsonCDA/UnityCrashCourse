@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -26,17 +27,16 @@ public class PlayerMovement : MonoBehaviour
     bool grounded;
 
     [Header("Score")]
-    public float score = 0;
+    private static int score = 0;
+    private static TMP_Text scoreObject;
 
     [Header("Shooting")]
     public Camera playerCamera;
     public GameObject rocketPrefab;
     public GameObject rocketSpawnPoint;
     //reference for last fired rocket
-    public GameObject lastSpawnedRocket;
+    private GameObject lastSpawnedRocket;
     private RaycastHit hit;
-
-    //
 
     private void Start()
     {
@@ -57,7 +57,8 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
             rb.drag = groundDrag;
         else
-            rb.drag = 0;
+            rb.drag = 5f;
+
 
         //player shooting
         ShootRocket();
@@ -75,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
         {
             lastSpawnedRocket = Instantiate(rocketPrefab, rocketSpawnPoint.transform.position, playerCamera.transform.rotation);
         }
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(1) && lastSpawnedRocket.gameObject != null)
         {
             Destroy(lastSpawnedRocket.gameObject);
         }
@@ -92,10 +93,10 @@ public class PlayerMovement : MonoBehaviour
                 {
                     Debug.Log("hit enemy");
                     Destroy(hit.collider.gameObject);
+                    PersistentManagerScript.instance.IncrementScore();
                 }
             }
         }
-        
     }
 
     private void MyInput()

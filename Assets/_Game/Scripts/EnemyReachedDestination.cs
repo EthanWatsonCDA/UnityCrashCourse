@@ -2,16 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RocketExplosion : MonoBehaviour
+public class EnemyReachedDestination : MonoBehaviour
 {
-
     // Start is called before the first frame update
     void Start()
     {
-        //destroy the object a certain amount of time after instantiating
-        Destroy(this.gameObject, 0.1f);
-
-        Debug.Log("starting explosion script");
+        
     }
 
     // Update is called once per frame
@@ -22,11 +18,10 @@ public class RocketExplosion : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("enemy collision detected");
         if (other.gameObject.CompareTag("Enemy"))
         {
             Destroy(other.gameObject);
-            PersistentManagerScript.instance.IncrementScore();
+            PersistentManagerScript.instance.DecrementLives();
         }
     }
 }

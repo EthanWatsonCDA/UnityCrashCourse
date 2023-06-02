@@ -37,6 +37,11 @@ public class PlayerMovement : MonoBehaviour
     //reference for last fired rocket
     private GameObject lastSpawnedRocket;
     private RaycastHit hit;
+    //shooting cooldowns
+    private float raycastCooldown = 0.5f;
+    private float lastRaycast;
+    private float rocketCooldown = 1f;
+    private float lastRocket;
 
     private void Start()
     {
@@ -47,22 +52,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        //ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        if (!PauseMenu.gameIsPaused)
+        {
+            //ground check
+            grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+            //handle drag
+            if (grounded)
+                rb.drag = groundDrag;
+            else
+                rb.drag = 1.5f;
 
-        MyInput();
-        SpeedControl();
-
-        //handle drag
-        if (grounded)
-            rb.drag = groundDrag;
-        else
-            rb.drag = 5f;
-
-
-        //player shooting
-        ShootRocket();
-        ShootRaycast();
+            //player movement
+            MyInput();
+            SpeedControl();
+            //player shooting
+            ShootRocket();
+            ShootRaycast();
+        }
     }
 
     private void FixedUpdate()

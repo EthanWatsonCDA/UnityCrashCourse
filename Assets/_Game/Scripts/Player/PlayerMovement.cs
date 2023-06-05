@@ -40,9 +40,9 @@ public class PlayerMovement : MonoBehaviour
     private RaycastHit hit;
     //shooting cooldowns
     private float raycastCooldown = 0.5f;
-    private float lastRaycast;
+    private float nextRaycast = 0f;
     private float rocketCooldown = 1f;
-    private float lastRocket;
+    private float nextRocket = 0f;
 
     private void Start()
     {
@@ -82,8 +82,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void ShootRocket()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && Time.time > nextRocket)
         {
+            nextRocket = Time.time + rocketCooldown;
             lastSpawnedRocket = Instantiate(rocketPrefab, rocketSpawnPoint.transform.position, playerCamera.transform.rotation);
         }
         if (Input.GetMouseButtonUp(1) && lastSpawnedRocket.gameObject != null)
@@ -94,8 +95,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void ShootRaycast()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && Time.time > nextRaycast)
         {
+            nextRaycast = Time.time + raycastCooldown;
             Debug.Log("shoot raycast");
             if (Physics.Raycast(rocketSpawnPoint.transform.position, playerCamera.transform.forward, out hit, 20f))
             {

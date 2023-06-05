@@ -9,15 +9,6 @@ public class MoveToCurrentDestination : MonoBehaviour
     Transform destinationLocation;
     GameObject destinationObject;
 
-
-
-
-    private void Awake()
-    {
-        
-    }
-
-
     // Start is called before the first frame update
     void Start()
     {

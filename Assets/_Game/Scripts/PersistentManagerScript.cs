@@ -20,6 +20,9 @@ public class PersistentManagerScript : MonoBehaviour
     public GameObject winScreen;
     public GameObject hudObject;
 
+    public TMP_Text finalScoreDisplay;
+    public TMP_Text finalTimeDisplay;
+
     private void Awake()
     {
         if (instance == null)
@@ -69,6 +72,8 @@ public class PersistentManagerScript : MonoBehaviour
             winScreen.SetActive(true);
             PauseMenu.PauseBase();
             hudObject.SetActive(false);
+            finalScoreDisplay.text = score.ToString("F0");
+            finalTimeDisplay.text = PauseMenu.totalTime.ToString("F2");
         }
     }
 }

@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     public Camera playerCamera;
     public GameObject rocketPrefab;
     public GameObject rocketSpawnPoint;
+    public GameObject visualBulletPrefab;
     //reference for last fired rocket
     private GameObject lastSpawnedRocket;
     private RaycastHit hit;
@@ -84,7 +85,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1) && Time.time > nextRocket)
         {
+            //restart cooldown timer
             nextRocket = Time.time + rocketCooldown;
+            //spawn rocket and store it in a variable
             lastSpawnedRocket = Instantiate(rocketPrefab, rocketSpawnPoint.transform.position, playerCamera.transform.rotation);
         }
         if (Input.GetMouseButtonUp(1) && lastSpawnedRocket.gameObject != null)
@@ -97,9 +100,16 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && Time.time > nextRaycast)
         {
+            //restart cooldown timer
             nextRaycast = Time.time + raycastCooldown;
+
+            //spawn visual bullet for effects
+            Instantiate(visualBulletPrefab, rocketSpawnPoint.transform.position, playerCamera.transform.rotation);
+
             Debug.Log("shoot raycast");
-            if (Physics.Raycast(rocketSpawnPoint.transform.position, playerCamera.transform.forward, out hit, 20f))
+
+            //perform raycast
+            if (Physics.Raycast(rocketSpawnPoint.transform.position, playerCamera.transform.forward, out hit, 50f))
             {
                 if (hit.collider.gameObject.CompareTag("Enemy"))
                 {
@@ -114,6 +124,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void MyInput()
     {
+        //get mouse movement
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 

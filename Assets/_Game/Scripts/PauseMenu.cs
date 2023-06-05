@@ -42,7 +42,7 @@ public class PauseMenu : MonoBehaviour
 
         //accumulate time and constantly update to show on HUD
         totalTime += Time.deltaTime;
-        timeDisplay.text = totalTime.ToString("F0");
+        timeDisplay.text = totalTime.ToString("F2");
     }
 
     //PauseMenu Buttons

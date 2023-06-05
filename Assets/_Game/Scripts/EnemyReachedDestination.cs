@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class EnemyReachedDestination : MonoBehaviour
 {
+    public GameObject gameOverScreen;
+    public GameObject hudObject;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +25,16 @@ public class EnemyReachedDestination : MonoBehaviour
         {
             Destroy(other.gameObject);
             PersistentManagerScript.instance.DecrementLives();
+            PersistentManagerScript.instance.DecrementNumEnemies();
+
+            //handle game over screen
+            if (PersistentManagerScript.instance.lives <= 0)
+            {
+                gameOverScreen.SetActive(true);
+                PauseMenu.PauseBase();
+                PauseMenu.canPause = false;
+                hudObject.SetActive(false);
+            }
         }
     }
 }

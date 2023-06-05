@@ -1,27 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
     public static bool gameIsPaused = false;
+    public static bool canPause = true;
+    public static float totalTime = 0;
 
     public GameObject pauseMenuUI;
     public GameObject settingsMenuObject;
     public GameObject hudObject;
+
+    public TMP_Text timeDisplay;
 
     // Start is called before the first frame update
     void Start()
     {
         pauseMenuUI.SetActive(false);
         settingsMenuObject.SetActive(false);
+        hudObject.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        //handle pause/resume with escape key
+        if (Input.GetKeyDown(KeyCode.Escape) && canPause)
         {
             if (gameIsPaused)
             {
@@ -32,6 +39,10 @@ public class PauseMenu : MonoBehaviour
                 Pause();
             }
         }
+
+        //accumulate time and constantly update to show on HUD
+        totalTime += Time.deltaTime;
+        timeDisplay.text = totalTime.ToString("F0");
     }
 
     //PauseMenu Buttons
@@ -45,13 +56,18 @@ public class PauseMenu : MonoBehaviour
         PlayerCameraRotation.lockCursor();
     }
 
+    public static void PauseBase()
+    {
+        Time.timeScale = 0f;
+        gameIsPaused = true;
+        PlayerCameraRotation.unlockCursor();
+    }
+
     public void Pause()
     {
         pauseMenuUI.SetActive(true);
         hudObject.SetActive(false);
-        Time.timeScale = 0f;
-        gameIsPaused = true;
-        PlayerCameraRotation.unlockCursor();
+        PauseBase();
     }
 
     public void LoadSettingsMenu()
@@ -72,6 +88,7 @@ public class PauseMenu : MonoBehaviour
         Debug.Log("Restarting");
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Resume();
+        totalTime = 0;
     }
 
     //SettingsMenu Buttons

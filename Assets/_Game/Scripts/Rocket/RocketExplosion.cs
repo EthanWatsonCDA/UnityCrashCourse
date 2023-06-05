@@ -22,20 +22,30 @@ public class RocketExplosion : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("rocket explosion hit enemy");
+        
         if (other.gameObject.CompareTag("Enemy"))
         {
+            Debug.Log("rocket explosion hit enemy");
             Destroy(other.gameObject);
             PersistentManagerScript.instance.IncrementScore();
+            PersistentManagerScript.instance.DecrementNumEnemies();
+        }
+
+        
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("rocket explosion hit player");
+            other.GetComponent<Rigidbody>().AddExplosionForce(10, this.gameObject.transform.position, 2);
         }
     }
-
+    /*
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("rocket explosio hit player");
         if (collision.gameObject.CompareTag("Player"))
         {
-            collision.rigidbody.AddExplosionForce(10,this.gameObject.transform.position, 2);
+            Debug.Log("rocket explosion hit player");
+            collision.rigidbody.AddExplosionForce(10, this.gameObject.transform.position, 2);
         }
     }
+    */
 }

@@ -26,7 +26,8 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatIsGround;
     bool grounded;
 
-    [Header("Score")]
+    [Header("HUD")]
+    public TMP_Text speedDisplay;
     private static int score = 0;
     private static TMP_Text scoreObject;
 
@@ -69,6 +70,9 @@ public class PlayerMovement : MonoBehaviour
             ShootRocket();
             ShootRaycast();
         }
+
+        //show speed on HUD
+        speedDisplay.text = rb.velocity.magnitude.ToString("F2");
     }
 
     private void FixedUpdate()
@@ -100,6 +104,7 @@ public class PlayerMovement : MonoBehaviour
                     Debug.Log("hit enemy");
                     Destroy(hit.collider.gameObject);
                     PersistentManagerScript.instance.IncrementScore();
+                    PersistentManagerScript.instance.DecrementNumEnemies();
                 }
             }
         }

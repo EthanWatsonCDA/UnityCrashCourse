@@ -31,21 +31,11 @@ public class RocketExplosion : MonoBehaviour
             PersistentManagerScript.instance.DecrementNumEnemies();
         }
 
-        
+        //rocket jumping
         if (other.gameObject.CompareTag("Player"))
         {
             Debug.Log("rocket explosion hit player");
-            other.GetComponent<Rigidbody>().AddExplosionForce(10, this.gameObject.transform.position, 2);
+            other.transform.parent.gameObject.GetComponent<Rigidbody>().AddExplosionForce(1000, this.gameObject.transform.position, 2);
         }
     }
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("rocket explosion hit player");
-            collision.rigidbody.AddExplosionForce(10, this.gameObject.transform.position, 2);
-        }
-    }
-    */
 }

@@ -13,6 +13,7 @@ public class ProximityTrigger : MonoBehaviour
     public void TriggerEntered()
     {
         doOnEnter.Invoke();
+        Debug.Log("trigger entered 2");
     }
 
     public void TriggerExited()

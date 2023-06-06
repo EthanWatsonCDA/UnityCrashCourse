@@ -10,6 +10,7 @@ public class OnTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         parentTrigger.TriggerEntered();
+        Debug.Log("trigger entered 1");
     }
 
     private void OnTriggerExit(Collider other)

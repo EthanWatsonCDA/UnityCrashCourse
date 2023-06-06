@@ -31,7 +31,10 @@ public class RocketMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("rocket hit detected");
-        Destroy(this.gameObject);
+        if (!other.CompareTag("Player"))
+        {
+            Debug.Log("rocket hit detected");
+            Destroy(this.gameObject);
+        }
     }
 }
